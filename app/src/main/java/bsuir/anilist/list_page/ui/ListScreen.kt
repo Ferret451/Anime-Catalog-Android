@@ -17,34 +17,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import bsuir.anilist.auth.ui.AuthScreen
 import bsuir.anilist.list_page.model.Anime
 import bsuir.anilist.list_page.viewmodel.ListViewModel
+import bsuir.anilist.navigation.Screen
+import bsuir.anilist.ui.components.MainScreen
 
 @Composable
 fun ListScreen(listViewModel: ListViewModel) {
-    val animeList by listViewModel.animeList.collectAsState()
-    val currentAnime by listViewModel.currentAnime.collectAsState()
-    val errorMessage by listViewModel.errorMessage.collectAsState()
-
-    LaunchedEffect(Unit) {
-        listViewModel.loadAnimeList()
-    }
-
-    if (errorMessage.isNotEmpty()) {
-        Text(text = errorMessage, color = Color.Red)
-    } else if (animeList.isEmpty()) {
-        CircularProgressIndicator()
-    } else {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(animeList) { anime ->
-                AnimeCard(anime = anime, onClick = {  })
-            }
-        }
+    val navController = rememberNavController()
+    NavHost(navController, startDestination = Screen.ANIME_GRID.route) {
+        composable(Screen.ANIME_GRID.route) { AnimeList(listViewModel, navController) }
+        composable(Screen.ANIME.route) { AnimeDescription(listViewModel, navController) }
     }
 }
