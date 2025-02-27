@@ -22,25 +22,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import bsuir.anilist.auth.viewmodel.AuthViewModel
 import bsuir.anilist.navigation.Screen
-import bsuir.anilist.ui.theme.AniListTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun AuthScreen(authViewModel: AuthViewModel, navController: NavController) {
-    var isSignUp by rememberSaveable { mutableStateOf(true) }
+    var isSignUpForm by rememberSaveable { mutableStateOf(true) }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordCheck by rememberSaveable { mutableStateOf("") }
     val user by authViewModel.user.collectAsState()
     val errorMessage by authViewModel.errorMessage.collectAsState()
+
+    if (authViewModel.isAuthed()) { navController.navigate(Screen.MAIN.route) }
 
     Column(
         modifier = Modifier
@@ -60,16 +59,16 @@ fun AuthScreen(authViewModel: AuthViewModel, navController: NavController) {
             horizontalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             Button(
-                onClick = { isSignUp = !isSignUp },
+                onClick = { isSignUpForm = !isSignUpForm },
                 shape = RoundedCornerShape(12.dp),
-                enabled = !isSignUp
+                enabled = !isSignUpForm
             ) {
                 Text(text = "Sign up", fontSize = 16.sp)
             }
             Button(
-                onClick = { isSignUp = !isSignUp },
+                onClick = { isSignUpForm = !isSignUpForm },
                 shape = RoundedCornerShape(12.dp),
-                enabled = isSignUp
+                enabled = isSignUpForm
             ) {
                 Text(text = "Sign in", fontSize = 16.sp)
             }
@@ -96,7 +95,7 @@ fun AuthScreen(authViewModel: AuthViewModel, navController: NavController) {
                 visualTransformation = PasswordVisualTransformation(),
             )
 
-            if (isSignUp) {
+            if (isSignUpForm) {
                 OutlinedTextField(
                     value = passwordCheck,
                     onValueChange = { passwordCheck = it },
@@ -112,7 +111,7 @@ fun AuthScreen(authViewModel: AuthViewModel, navController: NavController) {
         Button(
             onClick = {
                 authViewModel.viewModelScope.launch {
-                    if (isSignUp) {
+                    if (isSignUpForm) {
                         authViewModel.createAccount(email, password, passwordCheck)
                     } else {
                         authViewModel.signIn(email, password)

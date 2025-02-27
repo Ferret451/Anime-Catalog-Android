@@ -6,7 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import bsuir.anilist.auth.model.FirebaseUserRepository
 import bsuir.anilist.auth.model.IUserRepository
 import bsuir.anilist.auth.model.User
-import bsuir.anilist.auth.utils.InputValidator
+import bsuir.anilist.utils.InputValidator
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 class AuthViewModel : ViewModel() {
     private val _repository: IUserRepository = FirebaseUserRepository()
 
-    private var _user = MutableStateFlow(User())
-    var user = _user.asStateFlow()
+    private val _user = MutableStateFlow(User())
+    val user = _user.asStateFlow()
 
     private val _errorMessage = MutableStateFlow("")
     val errorMessage = _errorMessage.asStateFlow()

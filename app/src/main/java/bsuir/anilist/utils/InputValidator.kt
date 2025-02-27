@@ -1,4 +1,4 @@
-package bsuir.anilist.auth.utils
+package bsuir.anilist.utils
 
 import android.util.Patterns
 
