@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,15 +25,22 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import bsuir.anilist.auth.viewmodel.AuthViewModel
+import bsuir.anilist.navigation.Screen
 import bsuir.anilist.ui.theme.AniListTheme
+import kotlinx.coroutines.launch
 
 @Composable
-fun AuthScreen() {
+fun AuthScreen(authViewModel: AuthViewModel, navController: NavController) {
     var isSignUp by rememberSaveable { mutableStateOf(true) }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordCheck by rememberSaveable { mutableStateOf("") }
-    var errorMessage by rememberSaveable { mutableStateOf("") }
+    val user by authViewModel.user.collectAsState()
+    val errorMessage by authViewModel.errorMessage.collectAsState()
 
     Column(
         modifier = Modifier
@@ -92,7 +100,7 @@ fun AuthScreen() {
                 OutlinedTextField(
                     value = passwordCheck,
                     onValueChange = { passwordCheck = it },
-                    label = { Text("Repeat Password") },
+                    label = { Text("Password Check") },
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth(0.8f),
                     visualTransformation = PasswordVisualTransformation(),
@@ -102,19 +110,23 @@ fun AuthScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { },
+            onClick = {
+                authViewModel.viewModelScope.launch {
+                    if (isSignUp) {
+                        authViewModel.createAccount(email, password, passwordCheck)
+                    } else {
+                        authViewModel.signIn(email, password)
+                    }
+
+                    if (authViewModel.isAuthed()) {
+                        navController.navigate(Screen.MAIN.route)
+                    }
+                }
+            },
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(text = "Continue", fontSize = 16.sp)
         }
-    }
-}
-
-@Preview
-@Composable
-fun RegistrationScreenPreview() {
-    AniListTheme {
-        AuthScreen()
     }
 }
 
