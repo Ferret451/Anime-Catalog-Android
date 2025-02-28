@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +42,7 @@ fun ProfileScreen(
     navController: NavController
 ) {
     val userInfo by profileViewModel.userInfo.collectAsState()
+    val isLoaded by profileViewModel.isLoaded.collectAsState()
     val errorMessage by profileViewModel.errorMessage.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -53,6 +55,13 @@ fun ProfileScreen(
             contentAlignment = Alignment.Center
         ) {
             Text(text = errorMessage, color = Color.Red)
+        }
+    } else if (!isLoaded) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
         }
     } else {
         Column(
