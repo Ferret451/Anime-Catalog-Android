@@ -2,8 +2,6 @@ package bsuir.anilist.list_page.model
 
 import bsuir.anilist.utils.DBPath
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
-import kotlinx.coroutines.tasks.await
 
 class FirestoreListRepository: IListRepository {
     private val db = FirebaseFirestore.getInstance()

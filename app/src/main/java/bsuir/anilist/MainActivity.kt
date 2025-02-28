@@ -1,7 +1,6 @@
 package bsuir.anilist
 
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge

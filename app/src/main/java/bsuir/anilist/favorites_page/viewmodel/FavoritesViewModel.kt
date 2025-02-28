@@ -7,9 +7,6 @@ import bsuir.anilist.favorites_page.model.FirebaseFavoritesRepository
 import bsuir.anilist.favorites_page.model.IFavoriteRepository
 import bsuir.anilist.list_page.model.Anime
 import bsuir.anilist.list_page.viewmodel.ListViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

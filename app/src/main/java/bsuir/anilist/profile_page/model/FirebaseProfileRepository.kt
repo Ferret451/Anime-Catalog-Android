@@ -1,7 +1,5 @@
 package bsuir.anilist.profile_page.model
 
-import bsuir.anilist.auth.model.User
-import bsuir.anilist.list_page.model.Anime
 import bsuir.anilist.utils.DBPath
 import com.google.firebase.firestore.FirebaseFirestore
 
