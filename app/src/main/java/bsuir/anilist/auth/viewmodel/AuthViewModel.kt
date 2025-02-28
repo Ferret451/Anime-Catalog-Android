@@ -2,7 +2,6 @@ package bsuir.anilist.auth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import bsuir.anilist.auth.model.FirebaseUserRepository
 import bsuir.anilist.auth.model.IUserRepository
 import bsuir.anilist.auth.model.User
