@@ -58,7 +58,7 @@ fun AnimeList(listViewModel: ListViewModel, navController: NavController) {
                     anime = anime,
                     onClick = {
                         listViewModel.setCurrentAnime(anime)
-                        navController.navigate(Screen.ANIME.route)
+                        navController.navigate(Screen.LIST_ANIME.route)
                     }
                 )
             }
