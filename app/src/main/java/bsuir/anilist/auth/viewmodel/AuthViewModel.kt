@@ -31,6 +31,7 @@ class AuthViewModel : ViewModel() {
         val result = _repository.createAccount(email, password)
         _user.value = result.first
         _errorMessage.value = result.second
+        clearError()
     }
 
     suspend fun signIn(email: String, password: String) {
@@ -42,9 +43,16 @@ class AuthViewModel : ViewModel() {
         val result = _repository.signIn(email, password)
         _user.value = result.first
         _errorMessage.value = result.second
+        clearError()
     }
 
-    public fun updateCurrentUser() {
+    suspend fun signOut() {
+        val result = _repository.signOut()
+        _errorMessage.value = result
+        clearError()
+    }
+
+    fun updateCurrentUser() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             _user.value.id = currentUser.uid
@@ -52,11 +60,11 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    public fun getCurrentUser(): User {
+    fun getCurrentUser(): User {
         return _user.value
     }
 
-    public fun isAuthed(): Boolean {
+    fun isAuthed(): Boolean {
         return _repository.isAuthed()
     }
 

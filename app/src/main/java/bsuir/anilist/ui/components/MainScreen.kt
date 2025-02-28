@@ -32,7 +32,7 @@ fun MainScreen(authViewModel: AuthViewModel, listViewModel: ListViewModel, favor
         ) {
             composable(Screen.LIST.route) { ListScreen(listViewModel, favoritesViewModel) }
             composable(Screen.FAVORITES.route) { FavoritesScreen(favoritesViewModel) }
-            composable(Screen.PROFILE.route) { ProfileScreen(authViewModel, profileViewModel) }
+            composable(Screen.PROFILE.route) { ProfileScreen(authViewModel, profileViewModel, navController) }
         }
     }
 }

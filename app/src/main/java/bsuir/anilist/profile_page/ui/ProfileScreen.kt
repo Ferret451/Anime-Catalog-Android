@@ -30,6 +30,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -39,11 +41,13 @@ import bsuir.anilist.navigation.Screen
 import bsuir.anilist.profile_page.model.UserInfo
 import bsuir.anilist.profile_page.viewmodel.ProfileViewModel
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
     authViewModel: AuthViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    navController: NavController
 ) {
     val userInfo by profileViewModel.userInfo.collectAsState()
     val errorMessage by profileViewModel.errorMessage.collectAsState()
@@ -61,7 +65,9 @@ fun ProfileScreen(
         }
     } else {
         Column(
-            modifier = Modifier.padding(16.dp).fillMaxSize(),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -69,7 +75,9 @@ fun ProfileScreen(
                 painter = rememberAsyncImagePainter(userInfo.avatarURL),
                 contentDescription = "Avatar",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.size(100.dp).clip(CircleShape)
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
             )
 
             var nickname by rememberSaveable { mutableStateOf(userInfo.nickname) }
@@ -101,7 +109,14 @@ fun ProfileScreen(
                         )
                     }, modifier = Modifier.fillMaxWidth()) { Text("Save changes") }
 
-                    Button(onClick = { /*authViewModel.signOut()*/ }, modifier = Modifier.fillMaxWidth()) { Text("Quit") }
+                    Button(
+                        onClick = {
+                            authViewModel.viewModelScope.launch {
+                                authViewModel.signOut()
+                                navController.navigate((Screen.AUTH.route))
+                            }
+                         },
+                        modifier = Modifier.fillMaxWidth()) { Text("Quit") }
                 }
             }
         }

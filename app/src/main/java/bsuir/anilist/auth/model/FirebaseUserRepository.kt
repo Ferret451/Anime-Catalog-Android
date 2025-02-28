@@ -42,6 +42,15 @@ class FirebaseUserRepository : IUserRepository {
         }
     }
 
+    override suspend fun signOut(): String {
+        return try {
+            val authResult = auth.signOut()
+            return ""
+        } catch (e: Exception) {
+            e.localizedMessage ?: "Authorization error"
+        }
+    }
+
     override fun isAuthed(): Boolean {
         return auth.currentUser != null
     }
