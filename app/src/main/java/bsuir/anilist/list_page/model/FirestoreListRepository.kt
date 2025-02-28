@@ -16,7 +16,7 @@ class FirestoreListRepository: IListRepository {
                 callback(list)
             }
             .addOnFailureListener {
-                callback(null) // В случае ошибки возвращаем null
+                callback(null)
             }
     }
 
@@ -27,7 +27,7 @@ class FirestoreListRepository: IListRepository {
                 callback(anime)
             }
             .addOnFailureListener {
-                callback(null) // В случае ошибки возвращаем null
+                callback(null)
             }
     }
 }

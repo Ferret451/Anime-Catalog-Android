@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import bsuir.anilist.auth.ui.AuthScreen
 import bsuir.anilist.auth.viewmodel.AuthViewModel
+import bsuir.anilist.favorites_page.viewmodel.FavoritesViewModel
 import bsuir.anilist.list_page.viewmodel.ListViewModel
 import bsuir.anilist.navigation.Screen
 import bsuir.anilist.ui.components.MainScreen
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 class MainActivity : ComponentActivity() {
     private val authViewModel: AuthViewModel = AuthViewModel()
     private val listViewModel: ListViewModel = ListViewModel()
+    private val favoritesViewModel: FavoritesViewModel = FavoritesViewModel(authViewModel, listViewModel)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController, startDestination = Screen.AUTH.route) {
                     composable(Screen.AUTH.route) { AuthScreen(authViewModel, navController) }
-                    composable(Screen.MAIN.route) { MainScreen(listViewModel, navController) }
+                    composable(Screen.MAIN.route) { MainScreen(listViewModel, favoritesViewModel, navController) }
                 }
             }
         }

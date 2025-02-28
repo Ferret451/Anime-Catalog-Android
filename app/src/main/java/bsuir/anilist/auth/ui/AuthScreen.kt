@@ -39,7 +39,10 @@ fun AuthScreen(authViewModel: AuthViewModel, navController: NavController) {
     val user by authViewModel.user.collectAsState()
     val errorMessage by authViewModel.errorMessage.collectAsState()
 
-    if (authViewModel.isAuthed()) { navController.navigate(Screen.MAIN.route) }
+    if (authViewModel.isAuthed()) {
+        authViewModel.updateCurrentUser()
+        navController.navigate(Screen.MAIN.route)
+    }
 
     Column(
         modifier = Modifier

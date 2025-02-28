@@ -19,12 +19,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import bsuir.anilist.favorites_page.viewmodel.FavoritesViewModel
 import coil.compose.rememberAsyncImagePainter
 import bsuir.anilist.list_page.model.Anime
 import bsuir.anilist.list_page.viewmodel.ListViewModel
 
 @Composable
-fun AnimeDescription(listViewModel: ListViewModel, navController: NavController) {
+fun AnimeDescription(listViewModel: ListViewModel, favoritesViewModel: FavoritesViewModel, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +53,7 @@ fun AnimeDescription(listViewModel: ListViewModel, navController: NavController)
         AnimeInfoRow(label = "Series", value = listViewModel.getCurrentAnime().seriesAmount.toString())
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { favoritesViewModel.addToFavorites() }) {
             Text(text = "Add to favorites")
         }
     }

@@ -8,12 +8,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import bsuir.anilist.favorites_page.ui.FavoritesScreen
+import bsuir.anilist.favorites_page.viewmodel.FavoritesViewModel
 import bsuir.anilist.list_page.ui.ListScreen
 import bsuir.anilist.list_page.viewmodel.ListViewModel
 import bsuir.anilist.navigation.Screen
 
 @Composable
-fun MainScreen(listViewModel: ListViewModel, navController: NavController) {
+fun MainScreen(listViewModel: ListViewModel, favoritesViewModel: FavoritesViewModel, navController: NavController) {
     val bottomNavController = rememberNavController()
 
     Scaffold(
@@ -25,8 +27,8 @@ fun MainScreen(listViewModel: ListViewModel, navController: NavController) {
             startDestination = Screen.LIST.route,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(Screen.LIST.route) { ListScreen(listViewModel) }
-            composable(Screen.FAVORITES.route) { FavoritesScreen() }
+            composable(Screen.LIST.route) { ListScreen(listViewModel, favoritesViewModel) }
+            composable(Screen.FAVORITES.route) { FavoritesScreen(favoritesViewModel) }
             composable(Screen.PROFILE.route) { ProfileScreen() }
         }
     }

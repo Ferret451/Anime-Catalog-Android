@@ -1,5 +1,6 @@
 package bsuir.anilist.utils
 
 enum class DBPath(val path: String) {
-    ANIME("anime")
+    ANIME("anime"),
+    FAVORITES("favorites")
 }

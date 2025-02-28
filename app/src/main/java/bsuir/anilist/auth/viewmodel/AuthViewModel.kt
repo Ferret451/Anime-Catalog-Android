@@ -44,6 +44,18 @@ class AuthViewModel : ViewModel() {
         _errorMessage.value = result.second
     }
 
+    public fun updateCurrentUser() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            _user.value.id = currentUser.uid
+            _user.value.email = currentUser.email.toString()
+        }
+    }
+
+    public fun getCurrentUser(): User {
+        return _user.value
+    }
+
     public fun isAuthed(): Boolean {
         return _repository.isAuthed()
     }

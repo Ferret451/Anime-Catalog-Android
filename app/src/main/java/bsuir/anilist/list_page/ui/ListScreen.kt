@@ -21,16 +21,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import bsuir.anilist.auth.ui.AuthScreen
+import bsuir.anilist.favorites_page.viewmodel.FavoritesViewModel
 import bsuir.anilist.list_page.model.Anime
 import bsuir.anilist.list_page.viewmodel.ListViewModel
 import bsuir.anilist.navigation.Screen
 import bsuir.anilist.ui.components.MainScreen
 
 @Composable
-fun ListScreen(listViewModel: ListViewModel) {
+fun ListScreen(listViewModel: ListViewModel, favoritesViewModel: FavoritesViewModel) {
     val navController = rememberNavController()
     NavHost(navController, startDestination = Screen.ANIME_GRID.route) {
         composable(Screen.ANIME_GRID.route) { AnimeList(listViewModel, navController) }
-        composable(Screen.ANIME.route) { AnimeDescription(listViewModel, navController) }
+        composable(Screen.ANIME.route) { AnimeDescription(listViewModel, favoritesViewModel, navController) }
     }
 }

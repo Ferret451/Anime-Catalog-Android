@@ -27,12 +27,14 @@ class ListViewModel : ViewModel() {
         }
     }
 
-    fun loadAnime(id: String) {
+    fun loadAnime(id: String, callback: (Anime?) -> Unit) {
         _repository.getAnime(id) { result ->
             if (result != null) {
                 _currentAnime = result
+                callback(result)
             } else {
                 _errorMessage.value = "Error loading anime!"
+                callback(null)
             }
         }
     }
