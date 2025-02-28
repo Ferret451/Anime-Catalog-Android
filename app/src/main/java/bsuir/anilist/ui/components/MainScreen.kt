@@ -15,9 +15,10 @@ import bsuir.anilist.list_page.ui.ListScreen
 import bsuir.anilist.list_page.viewmodel.ListViewModel
 import bsuir.anilist.navigation.Screen
 import bsuir.anilist.profile_page.ui.ProfileScreen
+import bsuir.anilist.profile_page.viewmodel.ProfileViewModel
 
 @Composable
-fun MainScreen(authViewModel: AuthViewModel, listViewModel: ListViewModel, favoritesViewModel: FavoritesViewModel, navController: NavController) {
+fun MainScreen(authViewModel: AuthViewModel, listViewModel: ListViewModel, favoritesViewModel: FavoritesViewModel, profileViewModel: ProfileViewModel, navController: NavController) {
     val bottomNavController = rememberNavController()
 
     Scaffold(
@@ -31,7 +32,7 @@ fun MainScreen(authViewModel: AuthViewModel, listViewModel: ListViewModel, favor
         ) {
             composable(Screen.LIST.route) { ListScreen(listViewModel, favoritesViewModel) }
             composable(Screen.FAVORITES.route) { FavoritesScreen(favoritesViewModel) }
-            composable(Screen.PROFILE.route) { ProfileScreen(authViewModel) }
+            composable(Screen.PROFILE.route) { ProfileScreen(authViewModel, profileViewModel) }
         }
     }
 }

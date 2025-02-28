@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import bsuir.anilist.auth.model.FirebaseUserRepository
 import bsuir.anilist.auth.model.IUserRepository
 import bsuir.anilist.auth.model.User
+import bsuir.anilist.profile_page.model.UserInfo
 import bsuir.anilist.utils.InputValidator
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay

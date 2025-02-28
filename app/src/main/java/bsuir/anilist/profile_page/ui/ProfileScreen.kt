@@ -2,6 +2,7 @@ package bsuir.anilist.profile_page.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,12 +11,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,44 +34,75 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import bsuir.anilist.auth.viewmodel.AuthViewModel
+import bsuir.anilist.favorites_page.ui.FavoriteItem
 import bsuir.anilist.navigation.Screen
+import bsuir.anilist.profile_page.model.UserInfo
+import bsuir.anilist.profile_page.viewmodel.ProfileViewModel
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun ProfileScreen(
     authViewModel: AuthViewModel,
+    profileViewModel: ProfileViewModel
 ) {
-    val user by authViewModel.user.collectAsState()
+    val userInfo by profileViewModel.userInfo.collectAsState()
+    val errorMessage by profileViewModel.errorMessage.collectAsState()
 
-    Column(
-        modifier = Modifier.padding(16.dp).fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = rememberAsyncImagePainter(user.userInfo.avatarURL),
-            contentDescription = "Avatar",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(100.dp)
-                .clip(CircleShape)
-        )
+    LaunchedEffect(Unit) {
+        profileViewModel.loadUserInfo()
+    }
 
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            item {
-                Text(text = "Email: ${user.email}")
-                InfoTextField(label = "Nickname", value = user.userInfo.nickname, onValueChange = { user.userInfo.nickname = it })
-                InfoTextField(label = "Avatar URL", value = user.userInfo.avatarURL, onValueChange = { user.userInfo.avatarURL = it })
-                InfoTextField(label = "Status", value = user.userInfo.status, onValueChange = { user.userInfo.status = it })
-                InfoTextField(label = "First Name", value = user.userInfo.firstname, onValueChange = { user.userInfo.firstname = it })
-                InfoTextField(label = "Last Name", value = user.userInfo.lastname, onValueChange = { user.userInfo.lastname = it })
-                InfoTextField(label = "Gender", value = user.userInfo.gender, onValueChange = { user.userInfo.gender = it })
-                InfoTextField(label = "Description", value = user.userInfo.description, onValueChange = { user.userInfo.description = it })
-                InfoTextField(label = "Birthday", value = user.userInfo.birthday, onValueChange = { user.userInfo.birthday = it })
-                InfoTextField(label = "Phone Number", value = user.userInfo.phoneNumber, onValueChange = { user.userInfo.phoneNumber = it })
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = {  }, modifier = Modifier.fillMaxWidth()) { Text("Save changes") }
-                Button(onClick = {  }, modifier = Modifier.fillMaxWidth()) { Text("Quit") }
+    if (errorMessage.isNotEmpty()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = errorMessage, color = Color.Red)
+        }
+    } else {
+        Column(
+            modifier = Modifier.padding(16.dp).fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(userInfo.avatarURL),
+                contentDescription = "Avatar",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(100.dp).clip(CircleShape)
+            )
+
+            var nickname by rememberSaveable { mutableStateOf(userInfo.nickname) }
+            var avatarUrl by rememberSaveable { mutableStateOf(userInfo.avatarURL) }
+            var status by rememberSaveable { mutableStateOf(userInfo.status) }
+            var firstName by rememberSaveable { mutableStateOf(userInfo.firstname) }
+            var lastName by rememberSaveable { mutableStateOf(userInfo.lastname) }
+            var gender by rememberSaveable { mutableStateOf(userInfo.gender) }
+            var description by rememberSaveable { mutableStateOf(userInfo.description) }
+            var birthday by rememberSaveable { mutableStateOf(userInfo.birthday) }
+            var phoneNumber by rememberSaveable { mutableStateOf(userInfo.phoneNumber) }
+
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                item {
+                    Text(text = "Email: ${authViewModel.getCurrentUser().email}")
+                    InfoTextField(label = "Nickname", value = nickname, onValueChange = { nickname = it })
+                    InfoTextField(label = "Avatar URL", value = avatarUrl, onValueChange = { avatarUrl = it })
+                    InfoTextField(label = "Status", value = status, onValueChange = { status = it })
+                    InfoTextField(label = "First Name", value = firstName, onValueChange = { firstName = it })
+                    InfoTextField(label = "Last Name", value = lastName, onValueChange = { lastName = it })
+                    InfoTextField(label = "Gender", value = gender, onValueChange = { gender = it })
+                    InfoTextField(label = "Description", value = description, onValueChange = { description = it })
+                    InfoTextField(label = "Birthday", value = birthday, onValueChange = { birthday = it })
+                    InfoTextField(label = "Phone Number", value = phoneNumber, onValueChange = { phoneNumber = it })
+
+                    Button(onClick = {
+                        profileViewModel.updateUserInfo(
+                            UserInfo(nickname, avatarUrl, status, firstName, lastName, gender, description, birthday, phoneNumber)
+                        )
+                    }, modifier = Modifier.fillMaxWidth()) { Text("Save changes") }
+
+                    Button(onClick = { /*authViewModel.signOut()*/ }, modifier = Modifier.fillMaxWidth()) { Text("Quit") }
+                }
             }
         }
     }
