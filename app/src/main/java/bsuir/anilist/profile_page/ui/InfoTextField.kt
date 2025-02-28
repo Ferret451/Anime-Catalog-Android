@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun InfoTextField(label: String, value: String, onValueChange: (String) -> Unit) {
+fun InfoTextField(label: String, value: String, onValueChange: (String) -> Unit, readOnly: Boolean = false) {
     OutlinedTextField(
         value = value,
         onValueChange = { onValueChange(it) },

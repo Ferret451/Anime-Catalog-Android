@@ -5,5 +5,6 @@ import bsuir.anilist.profile_page.model.UserInfo
 data class User(
     var id: String = "",
     var email: String = "",
+    var avatarURL: String = "",
     val userInfo: UserInfo = UserInfo()
 )
