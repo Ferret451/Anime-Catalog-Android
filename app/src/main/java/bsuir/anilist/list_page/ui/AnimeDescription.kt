@@ -32,7 +32,7 @@ import bsuir.anilist.list_page.viewmodel.ListViewModel
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun AnimeDescription(listViewModel: ListViewModel, favoritesViewModel: FavoritesViewModel, navController: NavController) {
+fun AnimeDescription(listViewModel: ListViewModel, favoritesViewModel: FavoritesViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()

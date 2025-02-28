@@ -13,6 +13,6 @@ fun ListScreen(listViewModel: ListViewModel, favoritesViewModel: FavoritesViewMo
     val navController = rememberNavController()
     NavHost(navController, startDestination = Screen.LIST_GRID.route) {
         composable(Screen.LIST_GRID.route) { AnimeList(listViewModel, navController) }
-        composable(Screen.LIST_ANIME.route) { AnimeDescription(listViewModel, favoritesViewModel, navController) }
+        composable(Screen.LIST_ANIME.route) { AnimeDescription(listViewModel, favoritesViewModel) }
     }
 }
